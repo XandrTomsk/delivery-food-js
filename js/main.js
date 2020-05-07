@@ -26,6 +26,7 @@ function toggleModal() {
 function toggleModalAuth() {
   modalAuth.classList.toggle("is-open");
   loginInput.style.borderColor = "";
+
 }
 
 buttonAuth.addEventListener ('click', toggleModalAuth);
@@ -159,23 +160,21 @@ function openGoods(event) { //карточка с продуктами
   
   const target = event.target;
   const restaurant = target.closest('.card-restaurant');
-  
-  if (!login) {toggleModalAuth();} else {
+ 
+    if (restaurant) {
+      if (login){
+        cardsMenu.textContent = '';
+        containerPromo.classList.add('hide');
+        restaurants.classList.add('hide');
+        menu.classList.remove('hide');
 
-  
-
-      if (restaurant) {
-          cardsMenu.textContent = '';
-          containerPromo.classList.add('hide');
-          restaurants.classList.add('hide');
-          menu.classList.remove('hide');
-
-          createCardGood();
-          createCardGood();
-          createCardGood();
+        createCardGood();
+        createCardGood();
+        createCardGood();
+      } else {
+        toggleModalAuth();
+        }
     }
-
-  }
 }
 
 cardsRestaurants.addEventListener('click', openGoods);
@@ -188,3 +187,11 @@ logo.addEventListener('click', function (){
 
 cartButton.addEventListener("click", toggleModal);
 close.addEventListener("click", toggleModal);
+
+new Swiper('.swiper-container', {
+  loop: true,
+  autoplay: {
+    delay: 5000,
+  },
+  slidesPerView: 1
+});
