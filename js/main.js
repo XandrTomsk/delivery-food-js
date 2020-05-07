@@ -13,6 +13,8 @@ function toggleModal() {
 //day 1
 
 const buttonAuth = document.querySelector(".button-auth");
+console.log('buttonAuth: ', buttonAuth);
+console.log('console.log('buttonAuth: ', buttonAuth);: ', console.log('buttonAuth: ', buttonAuth););
 const modalAuth = document.querySelector(".modal-auth");
 const closeAuth = document.querySelector(".close-auth");
 const logInForm = document.querySelector("#logInForm");
@@ -26,6 +28,7 @@ let login = localStorage.getItem('gloDelivery');
 
 function toggleModalAuth() {
   modalAuth.classList.toggle("is-open");
+  loginInput.style.borderColor = "";
 }
 
 buttonAuth.addEventListener ('click', toggleModalAuth);
@@ -41,7 +44,6 @@ function autorised() {
     userName.style.display = '';
     buttonOut.style.display = '';
     buttonOut.removeEventListener('click', logOut);
-    loginInput.classList.remove("label-auth-error");
     checkAuth();
   }
 
@@ -63,11 +65,10 @@ function notAutorised() {
   function logIn(event) {
     
     event.preventDefault();
-    login = loginInput.value;
-    
-    if (login) { //если логин не пустой
+        
+    if (loginInput.value) { //если логин не пустой
+      login = loginInput.value;
       localStorage.setItem('gloDelivery', login);
-
       toggleModalAuth();
       buttonAuth.removeEventListener ('click', toggleModalAuth);
       closeAuth.removeEventListener ('click', toggleModalAuth);
@@ -76,7 +77,7 @@ function notAutorised() {
       checkAuth();
     } else {
         alert("Вы не ввели логин. Введите логин и повторите попытку.");
-        loginInput.classList.add("label-auth-error");
+        loginInput.style.borderColor = "red";
       }
   
   }
