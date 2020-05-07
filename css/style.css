@@ -449,11 +449,6 @@ button {
     margin: 30px;
     
 }
-.label-auth-error{
-    background-color: #e76f6f;
-    border: 2px solid red;
-    /* color: #fff; */
-}
 
 .label-auth span {
     width: 80px;
