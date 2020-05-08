@@ -21,19 +21,15 @@ const cartButton = document.querySelector("#cart-button"),
   minPrice = document.querySelector(".price"),
   category = document.querySelector(".category");
 
-  
 let login = localStorage.getItem("gloDelivery");
 
 const getData = async function(url){
-
   const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error (`Ошибка по адресу ${url}, статус ошибки ${response.status}!`);
   }
   return await response.json();
-
-
 };
 
 const valid = function (str) {
@@ -69,7 +65,6 @@ function autorised() {
     checkAuth();
     returnMain();
   }
-
   console.log("авторизован");
 
   userName.textContent = login;
@@ -88,7 +83,6 @@ function notAutorised() {
     event.preventDefault();
     if (valid(loginInput.value)) {
       //проверка логина по регулярному выражению
-
       loginInput.style.borderColor = "";
       login = loginInput.value;
 
@@ -106,7 +100,6 @@ function notAutorised() {
       loginInput.value = "";
     }
   }
-
   buttonAuth.addEventListener("click", toggleModalAuth);
   closeAuth.addEventListener("click", toggleModalAuth);
   logInForm.addEventListener("submit", logIn);
@@ -119,11 +112,9 @@ function checkAuth() {
     notAutorised();
   }
 }
-
 checkAuth();
 
 function createCardRestaurant(restaurant) {
-
   const { 
     image, 
     kitchen, 
@@ -134,10 +125,12 @@ function createCardRestaurant(restaurant) {
     time_of_delivery: timeOfDelivery
    } = restaurant;
 
-  const card = `
-    <a class="card card-restaurant" 
-    data-products="${products}" 
-    data-info="${[name, price, stars, kitchen]}">
+  const card = document.createElement('a');
+  card.className = 'card card-restaurant';
+  card.products = products;
+  card.info = [name, price, stars, kitchen];
+  
+  card.insertAdjacentHTML('beforeend', `
       <img src="${image}" alt="image" class="card-image"/>
       <div class="card-text">
         <div class="card-heading">
@@ -152,10 +145,8 @@ function createCardRestaurant(restaurant) {
           <div class="category">${kitchen}</div>
         </div>
       </div>
-    </a>
-  `;
-
-  cardsRestaurants.insertAdjacentHTML("beforeend", card);
+ `);
+  cardsRestaurants.insertAdjacentElement("beforeend", card);
 }
 
 function createCardGood(goods) {
@@ -172,27 +163,25 @@ function createCardGood(goods) {
   card.className = "card";
 
   card.insertAdjacentHTML("beforeend",
-    `
-					<img src="${image}" alt="${name}" class="card-image"/>
-					<div class="card-text">
-						<div class="card-heading">
-							<h3 class="card-title card-title-reg">${name}</h3>
-						</div>
-						<div class="card-info">
-							<div class="ingredients">${description}.
-							</div>
-						</div>
-						<div class="card-buttons">
-							<button class="button button-primary button-add-cart">
-								<span class="button-card-text">В корзину</span>
-								<span class="button-cart-svg"></span>
-							</button>
-							<strong class="card-price-bold">${price} ₽</strong>
-						</div>
-					</div>
+  ` <img src="${image}" alt="${name}" class="card-image"/>
+		<div class="card-text">
+			<div class="card-heading">
+				<h3 class="card-title card-title-reg">${name}</h3>
+			</div>
+			<div class="card-info">
+				<div class="ingredients">${description}.
+				</div>
+			</div>
+			<div class="card-buttons">
+				<button class="button button-primary button-add-cart">
+					<span class="button-card-text">В корзину</span>
+					<span class="button-cart-svg"></span>
+				</button>
+				<strong class="card-price-bold">${price} ₽</strong>
+			</div>
+		</div>
   `
   );
-
   cardsMenu.insertAdjacentElement("beforeend", card);
 }
 
@@ -203,9 +192,8 @@ function openGoods(event) {  //карточка с продуктами
     const restaurant = target.closest(".card-restaurant");
 
     if (restaurant) {
-      const info = restaurant.dataset.info.split(',');
 
-      const [ name, price, stars, kitchen ] = info;
+      const [ name, price, stars, kitchen ] = restaurant.info;
 
       cardsMenu.textContent = "";
       containerPromo.classList.add("hide");
@@ -217,20 +205,14 @@ function openGoods(event) {  //карточка с продуктами
       minPrice.textContent = `От ${price} ₽`;
       category.textContent = kitchen;
 
-
-
-      getData(`./db/${restaurant.dataset.products}`).then(function(data){
+      getData(`./db/${restaurant.products}`).then(function(data){
         data.forEach(createCardGood);
       });
-
-
     } 
   } else {
     toggleModalAuth();
     }
 }
-
-
 
 function init(){
   getData('./db/partners.json').then(function(data){
